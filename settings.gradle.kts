@@ -21,4 +21,8 @@ dependencyResolutionManagement {
 
 rootProject.name = "SuperApp"
 include(":app")
- 
+include(":data")
+include(":domain")
+include(":features-note")
+include(":features-reminder")
+include(":features-rocket")

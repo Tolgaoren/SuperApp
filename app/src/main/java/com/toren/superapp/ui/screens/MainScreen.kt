@@ -14,8 +14,8 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
-import com.toren.superapp.ui.bottombar.BottomBarScreen
-import com.toren.superapp.ui.bottombar.BottomNavGraph
+import com.toren.superapp.ui.bottombar.BottomBarScreens
+import com.toren.superapp.NavGraph
 
 @Composable
 fun MainScreen(navController: NavHostController = rememberNavController()) {
@@ -23,9 +23,9 @@ fun MainScreen(navController: NavHostController = rememberNavController()) {
         mutableStateOf(0)
     }
     val items = listOf(
-        BottomBarScreen.Notes,
-        BottomBarScreen.Reminders,
-        BottomBarScreen.Launches
+        BottomBarScreens.Notes,
+        BottomBarScreens.Reminders,
+        BottomBarScreens.Launches
     )
     Scaffold(
         bottomBar = {
@@ -61,7 +61,7 @@ fun MainScreen(navController: NavHostController = rememberNavController()) {
             }
         }
     ) { innerPadding ->
-        BottomNavGraph(
+        NavGraph(
             navController = navController,
             modifier = Modifier.padding(innerPadding)
         )

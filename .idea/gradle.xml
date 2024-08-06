@@ -12,8 +12,8 @@
             <option value="$PROJECT_DIR$/app" />
             <option value="$PROJECT_DIR$/data" />
             <option value="$PROJECT_DIR$/domain" />
+            <option value="$PROJECT_DIR$/features-alarm" />
             <option value="$PROJECT_DIR$/features-note" />
-            <option value="$PROJECT_DIR$/features-reminder" />
             <option value="$PROJECT_DIR$/features-rocket" />
           </set>
         </option>

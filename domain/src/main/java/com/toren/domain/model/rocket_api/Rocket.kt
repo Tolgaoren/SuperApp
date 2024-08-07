@@ -1,9 +1,9 @@
-package com.toren.domain.model
+package com.toren.domain.model.rocket_api
 
 data class Rocket(
-    val date_local: String?,
+    val dateLocal: String?,
     val details: String?,
-    val flight_number: Int?,
+    val flightNumber: Int?,
     val id: String?,
     val links: Links?,
     val name: String?,

@@ -1,4 +1,4 @@
-package com.toren.features_rocket.ui.screens.rocket_list
+package com.toren.features_rocket.ui.rocket_list
 
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize

@@ -1,4 +1,4 @@
-package com.toren.features_note.ui.screens
+package com.toren.features_note.ui.create_note
 
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier

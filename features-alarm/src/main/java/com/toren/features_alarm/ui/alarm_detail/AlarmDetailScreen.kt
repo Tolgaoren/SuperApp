@@ -1,4 +1,4 @@
-package com.toren.features_alarm.ui.screens
+package com.toren.features_alarm.ui.alarm_detail
 
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier

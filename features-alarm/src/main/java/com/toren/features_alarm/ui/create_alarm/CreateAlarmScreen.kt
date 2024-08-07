@@ -1,4 +1,4 @@
-package com.toren.features_alarm.ui.screens
+package com.toren.features_alarm.ui.create_alarm
 
 
 import androidx.compose.foundation.layout.Arrangement

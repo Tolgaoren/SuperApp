@@ -1,4 +1,4 @@
-package com.toren.domain.model
+package com.toren.domain.model.rocket_api
 
 data class Patch(
     val large: String,

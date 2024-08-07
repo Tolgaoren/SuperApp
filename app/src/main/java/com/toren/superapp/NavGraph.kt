@@ -5,14 +5,15 @@ import androidx.compose.ui.Modifier
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
-import com.toren.features_note.ui.screens.NoteListScreen
+import com.toren.features_note.ui.note_list.NoteListScreen
 import com.toren.features_alarm.ui.graphs.AlarmScreens
-import com.toren.features_alarm.ui.screens.AlarmDetailScreen
-import com.toren.features_alarm.ui.screens.CreateAlarmScreen
-import com.toren.features_alarm.ui.screens.AlarmListScreen
+import com.toren.features_alarm.ui.alarm_detail.AlarmDetailScreen
+import com.toren.features_alarm.ui.create_alarm.CreateAlarmScreen
+import com.toren.features_alarm.ui.alarm_list.AlarmListScreen
 import com.toren.features_note.ui.graphs.NoteScreens
-import com.toren.features_note.ui.screens.CreateNoteScreen
-import com.toren.features_rocket.ui.screens.rocket_list.RocketListScreen
+import com.toren.features_note.ui.create_note.CreateNoteScreen
+import com.toren.features_note.ui.note_detail.NoteDetailScreen
+import com.toren.features_rocket.ui.rocket_list.RocketListScreen
 import com.toren.superapp.ui.bottombar.BottomBarScreens
 
 @Composable
@@ -43,6 +44,8 @@ fun NavGraph(
         composable(route = NoteScreens.CreateNoteScreen.route) {
             CreateNoteScreen()
         }
-
+        composable(route = NoteScreens.NoteDetailScreen.route) {
+            NoteDetailScreen()
+        }
     }
 }

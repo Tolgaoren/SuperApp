@@ -2,7 +2,7 @@ package com.toren.data.repository
 
 import com.toren.data.remote.api.RocketApi
 import com.toren.data.remote.dto.toRocket
-import com.toren.domain.model.Rocket
+import com.toren.domain.model.rocket_api.Rocket
 import com.toren.domain.repository.RocketRepository
 import javax.inject.Inject
 

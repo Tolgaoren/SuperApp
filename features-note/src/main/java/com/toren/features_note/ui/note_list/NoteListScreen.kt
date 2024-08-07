@@ -1,10 +1,10 @@
-package com.toren.features_alarm.ui.screens
+package com.toren.features_note.ui.note_list
 
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Add
+import androidx.compose.material.icons.filled.Create
 import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Surface
@@ -13,10 +13,11 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
-import com.toren.features_alarm.ui.graphs.AlarmScreens
+import com.toren.features_note.ui.graphs.NoteScreens
+
 
 @Composable
-fun AlarmListScreen(navController: NavHostController) {
+fun NoteListScreen(navController: NavHostController) {
     Surface {
         Box(
             modifier = Modifier
@@ -25,17 +26,18 @@ fun AlarmListScreen(navController: NavHostController) {
         ) {
             FloatingActionButton(
                 onClick = {
-                    navController.navigate(AlarmScreens.CreateAlarm.route)
+                    navController.navigate(NoteScreens.CreateNoteScreen.route)
                 },
                 modifier = Modifier
                     .align(Alignment.BottomEnd)
                     .padding(30.dp)
             ) {
                 Icon(
-                    imageVector = Icons.Filled.Add,
+                    imageVector = Icons.Filled.Create,
                     "New reminder action button."
                 )
             }
         }
     }
 }
+

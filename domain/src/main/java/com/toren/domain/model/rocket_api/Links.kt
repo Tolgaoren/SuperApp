@@ -1,4 +1,4 @@
-package com.toren.domain.model
+package com.toren.domain.model.rocket_api
 
 data class Links(
     val article: String?,
@@ -6,5 +6,5 @@ data class Links(
     val patch: Patch?,
     val webcast: String?,
     val wikipedia: String?,
-    val youtube_id: String?
+    val youtubeId: String?
 )

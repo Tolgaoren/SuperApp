@@ -3,11 +3,11 @@ package com.toren.data.local.entity
 import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.PrimaryKey
-import com.toren.domain.model.favorite_rocket.FavoriteRocket
-import com.toren.domain.model.rocket_api.Links
+import com.toren.domain.model.rocket.Links
+import com.toren.domain.model.rocket.Rocket
 
 @Entity(tableName = "rockets")
-data class FavoriteRocketEntity(
+data class RocketEntity(
     @PrimaryKey(autoGenerate = true) val id: Int = 0,
     @ColumnInfo(name = "date_local") val dateLocal: String?,
     @ColumnInfo(name = "details") val details: String?,
@@ -20,13 +20,13 @@ data class FavoriteRocketEntity(
 )
 
 
-fun FavoriteRocketEntity.toFavoriteRocket(): FavoriteRocket {
-    return FavoriteRocket(
-        id = id,
+fun RocketEntity.toRocket(): Rocket {
+    return Rocket(
+        localId = id,
         dateLocal = dateLocal,
         details = details,
         flightNumber = flightNumber,
-        rocketId = rocketId,
+        id = rocketId,
         links = links,
         name = name,
         rocket = rocket,
@@ -34,13 +34,13 @@ fun FavoriteRocketEntity.toFavoriteRocket(): FavoriteRocket {
     )
 }
 
-fun FavoriteRocket.toFavoriteRocketEntity(): FavoriteRocketEntity {
-    return FavoriteRocketEntity(
-        id = id,
+fun Rocket.toRocketEntity(): RocketEntity {
+    return RocketEntity(
+        id = localId,
         dateLocal = dateLocal,
         details = details,
         flightNumber = flightNumber,
-        rocketId = rocketId,
+        rocketId = id,
         links = links,
         name = name,
         rocket = rocket,

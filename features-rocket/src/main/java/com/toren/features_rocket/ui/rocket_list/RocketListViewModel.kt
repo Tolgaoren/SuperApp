@@ -1,41 +1,50 @@
 package com.toren.features_rocket.ui.rocket_list
 
-import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.toren.domain.model.favorite_rocket.FavoriteRocket
-import com.toren.domain.repository.FavoriteRocketRepository
-import com.toren.domain.repository.RocketRepository
+import com.toren.domain.Resource
+import com.toren.domain.use_case.rocket_api.GetLaunchesUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.launch
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.launchIn
+import kotlinx.coroutines.flow.onEach
 import javax.inject.Inject
 
 @HiltViewModel
 class RocketListViewModel
-    @Inject constructor(
-        private val rocketRepository: RocketRepository,
-        private val favoriteRocketRepository: FavoriteRocketRepository
-    ): ViewModel() {
+@Inject constructor(
+    private val getLaunchesUseCase: GetLaunchesUseCase,
+) : ViewModel() {
 
+    private val _uiState = MutableStateFlow(RocketListUiState())
+    val uiState: StateFlow<RocketListUiState> = _uiState
 
-    fun test() {
-        viewModelScope.launch {
-            val data = rocketRepository.getLaunches()
-            Log.d("data", data.toString())
-            /*val data1 = data[0]
-            favoriteRocketRepository.insertRocket(
-                FavoriteRocket(
-                    dateLocal = data1.dateLocal,
-                    details = data1.details,
-                    flightNumber = data1.flightNumber,
-                    rocketId = data1.id,
-                    links = data1.links,
-                    name = data1.name,
-                    rocket = data1.rocket,
-                    success = data1.success
-                )
-            )*/
+    init {
+        getLaunches()
+    }
+
+    fun onEvent(event: RocketListUiEvent) {
+        when (event) {
+            is RocketListUiEvent.Refresh -> {
+                getLaunches()
+            }
         }
     }
 
+    private fun getLaunches() {
+        getLaunchesUseCase().onEach { result ->
+            when (result) {
+                is Resource.Loading -> {
+                    _uiState.value = RocketListUiState(isLoading = true)
+                }
+                is Resource.Success -> {
+                    _uiState.value = RocketListUiState(rockets = result.data ?: emptyList())
+                }
+                is Resource.Error -> {
+                    _uiState.value = RocketListUiState(error = result.message ?: "Error")
+                }
+            }
+        }.launchIn(viewModelScope)
+    }
 }

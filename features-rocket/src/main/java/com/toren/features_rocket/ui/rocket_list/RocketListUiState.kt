@@ -1,6 +1,6 @@
 package com.toren.features_rocket.ui.rocket_list
 
-import com.toren.domain.model.rocket_api.Rocket
+import com.toren.domain.model.rocket.Rocket
 
 data class RocketListUiState(
     val rockets: List<Rocket> = emptyList(),

@@ -1,4 +1,4 @@
-package com.toren.domain.model.rocket_api
+package com.toren.domain.model.rocket
 
 data class Flickr(
     val original: List<Any>,

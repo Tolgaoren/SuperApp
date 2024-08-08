@@ -1,6 +1,6 @@
 package com.toren.data.remote.dto
 
-import com.toren.domain.model.rocket_api.Rocket
+import com.toren.domain.model.rocket.Rocket
 
 data class RocketDto(
     val auto_update: Boolean,
@@ -35,6 +35,7 @@ data class RocketDto(
 
 fun RocketDto.toRocket(): Rocket {
     return Rocket(
+        localId = 0,
         dateLocal = date_local,
         details = details,
         flightNumber = flight_number,

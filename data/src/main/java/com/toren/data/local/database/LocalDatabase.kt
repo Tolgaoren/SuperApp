@@ -8,13 +8,13 @@ import com.toren.data.local.dao.AlarmDao
 import com.toren.data.local.dao.NoteDao
 import com.toren.data.local.dao.RocketDao
 import com.toren.data.local.entity.AlarmEntity
-import com.toren.data.local.entity.FavoriteRocketEntity
+import com.toren.data.local.entity.RocketEntity
 import com.toren.data.local.entity.NoteEntity
 
 @Database(
     entities = [NoteEntity::class,
         AlarmEntity::class,
-        FavoriteRocketEntity::class],
+        RocketEntity::class],
     version = 1,
     exportSchema = false
 )

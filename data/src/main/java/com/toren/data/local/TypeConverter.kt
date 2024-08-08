@@ -3,7 +3,7 @@ package com.toren.data.local
 import androidx.room.ProvidedTypeConverter
 import androidx.room.TypeConverter
 import com.google.gson.Gson
-import com.toren.domain.model.rocket_api.Links
+import com.toren.domain.model.rocket.Links
 import javax.inject.Inject
 
 @ProvidedTypeConverter

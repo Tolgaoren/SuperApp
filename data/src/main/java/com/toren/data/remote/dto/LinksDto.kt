@@ -1,8 +1,8 @@
 package com.toren.data.remote.dto
 
-import com.toren.domain.model.rocket_api.Flickr
-import com.toren.domain.model.rocket_api.Links
-import com.toren.domain.model.rocket_api.Patch
+import com.toren.domain.model.rocket.Flickr
+import com.toren.domain.model.rocket.Links
+import com.toren.domain.model.rocket.Patch
 
 data class LinksDto(
     val article: String,

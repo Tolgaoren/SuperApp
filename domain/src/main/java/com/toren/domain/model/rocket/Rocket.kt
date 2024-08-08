@@ -1,6 +1,7 @@
-package com.toren.domain.model.rocket_api
+package com.toren.domain.model.rocket
 
 data class Rocket(
+    val localId: Int,
     val dateLocal: String?,
     val details: String?,
     val flightNumber: Int?,

@@ -4,13 +4,12 @@ import android.app.Application
 import androidx.room.Room
 import com.google.gson.Gson
 import com.toren.data.local.TypeConverter
-import com.toren.data.local.dao.NoteDao
 import com.toren.data.local.database.LocalDatabase
 import com.toren.data.repository.AlarmRepositoryImpl
-import com.toren.data.repository.FavoriteRocketRepositoryImpl
+import com.toren.data.repository.RocketRepositoryImpl
 import com.toren.data.repository.NoteRepositoryImpl
 import com.toren.domain.repository.AlarmRepository
-import com.toren.domain.repository.FavoriteRocketRepository
+import com.toren.domain.repository.RocketRepository
 import com.toren.domain.repository.NoteRepository
 import dagger.Module
 import dagger.Provides
@@ -43,8 +42,8 @@ object DatabaseModule {
     }
 
     @Provides
-    fun provideFavoriteRocketRepository(db: LocalDatabase): FavoriteRocketRepository {
-        return FavoriteRocketRepositoryImpl(db.rocketDao())
+    fun provideFavoriteRocketRepository(db: LocalDatabase): RocketRepository {
+        return RocketRepositoryImpl(db.rocketDao())
     }
 
     @Provides

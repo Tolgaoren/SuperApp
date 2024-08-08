@@ -22,12 +22,19 @@ class RocketListViewModel
         viewModelScope.launch {
             val data = rocketRepository.getLaunches()
             Log.d("data", data.toString())
-            val data2 = favoriteRocketRepository.insertRocket(
+            /*val data1 = data[0]
+            favoriteRocketRepository.insertRocket(
                 FavoriteRocket(
-                    name = "test"
+                    dateLocal = data1.dateLocal,
+                    details = data1.details,
+                    flightNumber = data1.flightNumber,
+                    rocketId = data1.id,
+                    links = data1.links,
+                    name = data1.name,
+                    rocket = data1.rocket,
+                    success = data1.success
                 )
-            )
-            Log.d("data2", data2.toString())
+            )*/
         }
     }
 

@@ -23,6 +23,6 @@ fun LinksDto.toLinks(): Links {
         patch = patch,
         webcast = webcast,
         wikipedia = wikipedia,
-        youtube_id = youtube_id
+        youtubeId = youtube_id
     )
 }

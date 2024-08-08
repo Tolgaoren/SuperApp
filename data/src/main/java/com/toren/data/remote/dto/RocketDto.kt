@@ -35,9 +35,9 @@ data class RocketDto(
 
 fun RocketDto.toRocket(): Rocket {
     return Rocket(
-        date_local = date_local,
+        dateLocal = date_local,
         details = details,
-        flight_number = flight_number,
+        flightNumber = flight_number,
         id = id,
         links = links.toLinks(),
         name = name,

@@ -13,6 +13,7 @@ import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.navigation.NavHostController
+import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import com.toren.superapp.ui.bottombar.BottomBarScreens
 import com.toren.superapp.NavGraph
@@ -27,6 +28,10 @@ fun MainScreen(navController: NavHostController = rememberNavController()) {
         BottomBarScreens.Reminders,
         BottomBarScreens.Launches
     )
+    val navBackStackEntry by navController.currentBackStackEntryAsState()
+    val currentRoute = navBackStackEntry?.destination?.route
+    selectedItemIndex = items.indexOfFirst { it.route == currentRoute }
+
     Scaffold(
         bottomBar = {
             NavigationBar {

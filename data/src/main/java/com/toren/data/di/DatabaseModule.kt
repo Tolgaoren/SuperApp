@@ -42,9 +42,10 @@ object DatabaseModule {
     }
 
     @Provides
-    fun provideFavoriteRocketRepository(db: LocalDatabase): RocketRepository {
-        return RocketRepositoryImpl(db.rocketDao())
+    fun provideRocketRepository(db: LocalDatabase): RocketRepository {
+        return RocketRepositoryImpl(db.rocketDao(), db.favoriteRocketDao())
     }
+
 
     @Provides
     @Singleton

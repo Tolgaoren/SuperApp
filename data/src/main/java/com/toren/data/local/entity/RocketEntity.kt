@@ -2,11 +2,13 @@ package com.toren.data.local.entity
 
 import androidx.room.ColumnInfo
 import androidx.room.Entity
+import androidx.room.Index
 import androidx.room.PrimaryKey
 import com.toren.domain.model.rocket.Links
 import com.toren.domain.model.rocket.Rocket
 
-@Entity(tableName = "rockets")
+@Entity(tableName = "rockets",
+    indices = [Index(value = ["rocket_id"], unique = true)])
 data class RocketEntity(
     @PrimaryKey(autoGenerate = true) val id: Int = 0,
     @ColumnInfo(name = "date_local") val dateLocal: String?,

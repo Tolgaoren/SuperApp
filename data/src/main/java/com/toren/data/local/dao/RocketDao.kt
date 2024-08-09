@@ -11,9 +11,15 @@ interface RocketDao {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insertRocket(rocket: RocketEntity) : Long
 
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    suspend fun insertAllRockets(rockets: List<RocketEntity>) : List<Long>
+
     @Query("SELECT * FROM rockets")
     suspend fun getRockets(): List<RocketEntity>
 
     @Query("DELETE FROM rockets WHERE id = :id")
     suspend fun deleteRocket(id: Int) : Int
+
+    @Query("SELECT * FROM rockets WHERE rocket_id = (:rocketId)")
+    suspend fun getFavoriteRockets(rocketId: List<Int> = listOf()): List<RocketEntity>?
 }

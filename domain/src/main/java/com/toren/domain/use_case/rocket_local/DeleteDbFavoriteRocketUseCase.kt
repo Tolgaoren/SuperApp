@@ -9,7 +9,7 @@ import javax.inject.Inject
 class DeleteDbFavoriteRocketUseCase @Inject constructor(
     private val repository: RocketRepository
 ) {
-    operator fun invoke(id: Int): Flow<Resource<Int>> = flow {
+    operator fun invoke(id: String): Flow<Resource<Int>> = flow {
         emit(Resource.Loading())
         try {
             val result = repository.deleteFavoriteRocket(id)

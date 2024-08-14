@@ -1,6 +1,14 @@
 package com.toren.data.remote.dto
 
+import android.os.Build
+import android.util.Log
+import androidx.annotation.RequiresApi
 import com.toren.domain.model.rocket.Rocket
+import java.text.SimpleDateFormat
+import java.time.OffsetDateTime
+import java.time.format.DateTimeFormatter
+import java.util.Date
+import java.util.Locale
 
 data class RocketDto(
     val auto_update: Boolean,
@@ -36,7 +44,7 @@ data class RocketDto(
 fun RocketDto.toRocket(): Rocket {
     return Rocket(
         localId = 0,
-        dateLocal = date_local,
+        dateLocal = date_local.toDate(),
         details = details,
         flightNumber = flight_number,
         id = id,
@@ -45,4 +53,23 @@ fun RocketDto.toRocket(): Rocket {
         rocket = rocket,
         success = success
     )
+}
+
+fun String.toDate(): String {
+    return if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+        val inputFormatter: DateTimeFormatter = DateTimeFormatter.ISO_OFFSET_DATE_TIME
+        val outputFormatter: DateTimeFormatter = DateTimeFormatter.ISO_LOCAL_DATE
+        val offsetDateTime: OffsetDateTime = OffsetDateTime.parse(this, inputFormatter)
+        offsetDateTime.format(outputFormatter)
+    } else {
+        try {
+            val inputFormatter = SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ssXXX", Locale.getDefault())
+            val outputFormatter = SimpleDateFormat("yyyy-MM-dd", Locale.getDefault())
+            val date: Date = inputFormatter.parse(this) ?: return this
+            outputFormatter.format(date)
+        } catch (e: Exception) {
+            Log.e("toDate", e.message.toString())
+            this
+        }
+    }
 }

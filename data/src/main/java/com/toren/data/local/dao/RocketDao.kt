@@ -20,6 +20,6 @@ interface RocketDao {
     @Query("DELETE FROM rockets WHERE id = :id")
     suspend fun deleteRocket(id: Int) : Int
 
-    @Query("SELECT * FROM rockets WHERE rocket_id = (:rocketId)")
-    suspend fun getFavoriteRockets(rocketId: List<Int> = listOf()): List<RocketEntity>?
+    @Query("SELECT * FROM rockets WHERE rocket_id IN (:rocketId)")
+    suspend fun getFavoriteRockets(rocketId: List<String> = listOf()): List<RocketEntity>?
 }

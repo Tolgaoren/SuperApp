@@ -1,5 +1,6 @@
 package com.toren.data.repository
 
+import android.util.Log
 import com.toren.data.local.dao.FavoriteRocketDao
 import com.toren.data.local.dao.RocketDao
 import com.toren.data.local.entity.FavoriteRocketEntity
@@ -39,16 +40,13 @@ class RocketRepositoryImpl
     }
 
     override suspend fun getFavoriteRockets(): List<Rocket> {
-        val ids = favoriteRocketDao.getFavoriteRockets().map { it.id }
-        return if (ids.isEmpty()) {
-            emptyList()
-        } else {
-            rocketDao.getFavoriteRockets(ids)?.map { it.toRocket() } ?: emptyList()
-        }
+        val ids = favoriteRocketDao.getFavoriteRockets().map { it.rocketId }
+        Log.d("GetFavoriteRockets", "getFavoriteRockets: impl $ids")
+        return rocketDao.getFavoriteRockets(ids)?.map { it.toRocket() } ?: emptyList()
     }
 
-    override suspend fun deleteFavoriteRocket(id: Int): Int {
-        return rocketDao.deleteRocket(id)
+    override suspend fun deleteFavoriteRocket(id: String): Int {
+        return favoriteRocketDao.deleteFavoriteRocket(id)
     }
 
 

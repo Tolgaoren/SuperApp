@@ -16,4 +16,7 @@ interface FavoriteRocketDao {
 
     @Query("DELETE FROM favorite_rockets WHERE rocket_id = :id")
     suspend fun deleteFavoriteRocket(id: String) : Int
+
+    @Query("SELECT * FROM favorite_rockets WHERE rocket_id = :id")
+    suspend fun isFavoriteRocket(id: String): FavoriteRocketEntity
 }

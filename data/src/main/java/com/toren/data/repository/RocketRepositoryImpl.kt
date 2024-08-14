@@ -27,6 +27,10 @@ class RocketRepositoryImpl
         return rocketDao.getRockets().map { it.toRocket() }
     }
 
+    override suspend fun getRocket(id: String): Rocket {
+        return rocketDao.getRocket(id).toRocket()
+    }
+
     override suspend fun deleteRocket(id: Int): Int {
         return rocketDao.deleteRocket(id)
     }
@@ -43,6 +47,10 @@ class RocketRepositoryImpl
         val ids = favoriteRocketDao.getFavoriteRockets().map { it.rocketId }
         Log.d("GetFavoriteRockets", "getFavoriteRockets: impl $ids")
         return rocketDao.getFavoriteRockets(ids)?.map { it.toRocket() } ?: emptyList()
+    }
+
+    override suspend fun isFavoriteRocket(id: String): Boolean {
+        return favoriteRocketDao.isFavoriteRocket(id).rocketId.isNotEmpty()
     }
 
     override suspend fun deleteFavoriteRocket(id: String): Int {

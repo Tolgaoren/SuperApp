@@ -59,6 +59,7 @@ fun RocketListScreen(
         isRefreshing = false
     }
     val favoriteRocketIds by viewModel.favoriteRocketIds.collectAsState()
+    val isDataSavedLocally by viewModel.isDataSavedLocally.collectAsState()
 
     Surface(
         modifier = Modifier.fillMaxSize()
@@ -97,10 +98,14 @@ fun RocketListScreen(
                                 )
                             },
                             onClick = {
-                                navController.navigate(
-                                    RocketScreens.RocketDetailScreen.route
-                                            + "/${rocket.localId}"
-                                )
+                                if (isDataSavedLocally) {
+                                    navController.navigate(
+                                        RocketScreens.RocketDetailScreen.route
+                                                + "/${rocket.id}"
+                                    )
+                                } else {
+                                    viewModel.onEvent(RocketListUiEvent.Refresh)
+                                }
                             }
                         )
                     }

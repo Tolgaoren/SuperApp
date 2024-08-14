@@ -36,6 +36,9 @@ class RocketListViewModel
     private val _favoriteRocketIds = MutableStateFlow(setOf<String>())
     val favoriteRocketIds: StateFlow<Set<String>> = _favoriteRocketIds
 
+    private val _isDataSavedLocally = MutableStateFlow(false)
+    val isDataSavedLocally: StateFlow<Boolean> = _isDataSavedLocally
+
     init {
         getLocalRockets()
         getFavoriteRockets()
@@ -53,6 +56,10 @@ class RocketListViewModel
                 } else {
                     insertFavoriteRocket(event.rocketId)
                 }
+            }
+
+            is RocketListUiEvent.SaveLocal -> {
+                insertAllRockets(uiState.value.rockets)
             }
         }
     }
@@ -84,10 +91,12 @@ class RocketListViewModel
                 }
 
                 is Resource.Success -> {
+                    _isDataSavedLocally.value = true
                     Log.d("InsertAllRockets", "All rockets inserted with IDs: ${result.data}")
                 }
 
                 is Resource.Error -> {
+                    _isDataSavedLocally.value = false
                     Log.e("InsertAllRockets", "Error inserting all rockets: ${result.message}")
                 }
             }
@@ -107,12 +116,14 @@ class RocketListViewModel
                         Log.d("GetLocalRockets", "Getting rockets from API...")
                     } else {
                         _uiState.value = RocketListUiState(rockets = result.data ?: emptyList())
+                        _isDataSavedLocally.value = true
                         Log.d("GetLocalRockets", "Getting rockets from database...")
                     }
                 }
 
                 is Resource.Error -> {
                     _uiState.value = RocketListUiState(error = result.message ?: "Error")
+                    _isDataSavedLocally.value = false
                 }
             }
         }.launchIn(viewModelScope)

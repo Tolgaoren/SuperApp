@@ -54,7 +54,7 @@ fun NavGraph(
         }
         composable(route = RocketScreens.RocketDetailScreen.route + "/{rocketId}") {
             val rocketId = it.arguments?.getString("rocketId")
-            RocketDetailScreen(rocketId = rocketId!!.toInt())
+            RocketDetailScreen(rocketId = rocketId.toString())
         }
     }
 }

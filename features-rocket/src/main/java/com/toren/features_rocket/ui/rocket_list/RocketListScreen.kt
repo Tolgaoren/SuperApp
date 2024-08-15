@@ -1,5 +1,8 @@
+@file:OptIn(ExperimentalMaterial3Api::class)
+
 package com.toren.features_rocket.ui.rocket_list
 
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -9,10 +12,12 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.layout.widthIn
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Favorite
+import androidx.compose.material.icons.outlined.Favorite
 import androidx.compose.material.icons.outlined.FavoriteBorder
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
@@ -20,6 +25,7 @@ import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
+import androidx.compose.material3.OutlinedIconButton
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.material3.pulltorefresh.PullToRefreshBox
@@ -34,6 +40,8 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.TextUnit
@@ -43,9 +51,9 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import coil.compose.AsyncImage
 import com.toren.domain.model.rocket.Rocket
+import com.toren.features_rocket.R
 import com.toren.features_rocket.ui.graphs.RocketScreens
 
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun RocketListScreen(
     viewModel: RocketListViewModel = hiltViewModel(),
@@ -69,50 +77,84 @@ fun RocketListScreen(
     Surface(
         modifier = Modifier.fillMaxSize()
     ) {
-        if (uiState.isLoading) {
-            Box(
-                modifier = Modifier.fillMaxSize(),
-                contentAlignment = Alignment.Center
-            ) {
-                CircularProgressIndicator()
-            }
-        } else if (uiState.error != null) {
-            Box(
+
+        Column {
+
+            Row(
                 modifier = Modifier
-                    .fillMaxSize(),
-                contentAlignment = Alignment.Center
+                    .fillMaxWidth()
+                    .padding(start = 20.dp, end = 20.dp),
+                horizontalArrangement = Arrangement.SpaceBetween,
+                verticalAlignment = Alignment.CenterVertically
             ) {
-                Text(text = uiState.error.toString())
-            }
-        } else {
-            PullToRefreshBox(
-                state = state,
-                isRefreshing = isRefreshing,
-                onRefresh = onRefresh
-            ) {
-                LazyColumn(
-                    modifier = Modifier.fillMaxWidth()
-                ) {
-                    items(uiState.rockets) { rocket ->
-                        RocketItem(
-                            rocket = rocket,
-                            isFavorite = favoriteRocketIds.contains(rocket.id!!),
-                            onFavoriteClick = {
-                                viewModel.onEvent(
-                                    RocketListUiEvent.FavoriteRocket(rocket.id!!)
-                                )
-                            },
-                            onClick = {
-                                if (isDataSavedLocally) {
-                                    navController.navigate(
-                                        RocketScreens.RocketDetailScreen.route
-                                                + "/${rocket.id}"
-                                    )
-                                } else {
-                                    viewModel.onEvent(RocketListUiEvent.Refresh)
-                                }
-                            }
+                Image(
+                    imageVector = ImageVector.vectorResource(id = R.drawable.logo),
+                    contentDescription = "Logo",
+                    modifier = Modifier
+                        .height(20.dp)
+                        .widthIn(max = 200.dp)
+                        .align(Alignment.CenterVertically),
+                )
+
+                IconButton(
+                    onClick = {
+                        navController.navigate(
+                            RocketScreens.FavoriteRocketsScreen.route
                         )
+                    },
+                    modifier = Modifier.align(Alignment.CenterVertically)
+                ) {
+                    Icon(
+                        imageVector = Icons.Outlined.FavoriteBorder ,
+                        contentDescription = "Favorites button")
+                }
+            }
+
+            if (uiState.isLoading) {
+                Box(
+                    modifier = Modifier.fillMaxSize(),
+                    contentAlignment = Alignment.Center
+                ) {
+                    CircularProgressIndicator()
+                }
+            } else if (uiState.error != null) {
+                Box(
+                    modifier = Modifier
+                        .fillMaxSize(),
+                    contentAlignment = Alignment.Center
+                ) {
+                    Text(text = uiState.error.toString())
+                }
+            } else {
+                PullToRefreshBox(
+                    state = state,
+                    isRefreshing = isRefreshing,
+                    onRefresh = onRefresh
+                ) {
+                    LazyColumn(
+                        modifier = Modifier.fillMaxWidth()
+                    ) {
+                        items(uiState.rockets) { rocket ->
+                            RocketItem(
+                                rocket = rocket,
+                                isFavorite = favoriteRocketIds.contains(rocket.id!!),
+                                onFavoriteClick = {
+                                    viewModel.onEvent(
+                                        RocketListUiEvent.FavoriteRocket(rocket.id!!)
+                                    )
+                                },
+                                onClick = {
+                                    if (isDataSavedLocally) {
+                                        navController.navigate(
+                                            RocketScreens.RocketDetailScreen.route
+                                                    + "/${rocket.id}"
+                                        )
+                                    } else {
+                                        viewModel.onEvent(RocketListUiEvent.Refresh)
+                                    }
+                                }
+                            )
+                        }
                     }
                 }
             }

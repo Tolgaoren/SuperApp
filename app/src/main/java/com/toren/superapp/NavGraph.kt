@@ -13,6 +13,7 @@ import com.toren.features_alarm.ui.alarm_list.AlarmListScreen
 import com.toren.features_note.ui.graphs.NoteScreens
 import com.toren.features_note.ui.create_note.CreateNoteScreen
 import com.toren.features_note.ui.note_detail.NoteDetailScreen
+import com.toren.features_rocket.ui.favorite_rockets.FavoriteRocketsScreen
 import com.toren.features_rocket.ui.graphs.RocketScreens
 import com.toren.features_rocket.ui.rocket_detail.RocketDetailScreen
 import com.toren.features_rocket.ui.rocket_list.RocketListScreen
@@ -55,6 +56,9 @@ fun NavGraph(
         composable(route = RocketScreens.RocketDetailScreen.route + "/{rocketId}") {
             val rocketId = it.arguments?.getString("rocketId")
             RocketDetailScreen(rocketId = rocketId.toString())
+        }
+        composable(route = RocketScreens.FavoriteRocketsScreen.route) {
+            FavoriteRocketsScreen(navController = navController)
         }
     }
 }

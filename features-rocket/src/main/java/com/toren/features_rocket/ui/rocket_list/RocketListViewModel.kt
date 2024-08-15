@@ -134,7 +134,6 @@ class RocketListViewModel
     }
 
     private fun getFavoriteRockets() {
-        viewModelScope.launch {
             getFavoriteRocketsUseCase().onEach { result ->
                 when (result) {
                     is Resource.Loading -> {
@@ -154,7 +153,6 @@ class RocketListViewModel
                     }
                 }
             }.launchIn(viewModelScope)
-        }
     }
 
     private fun insertFavoriteRocket(rocketId: String) {

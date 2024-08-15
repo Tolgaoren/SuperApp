@@ -12,4 +12,8 @@ sealed class RocketScreens(
         route = "RocketDetailScreen",
         title = "RocketDetailScreen"
     )
+    object FavoriteRocketsScreen : RocketScreens(
+        route = "FavoriteRocketsScreen",
+        title = "FavoriteRocketsScreen"
+    )
 }

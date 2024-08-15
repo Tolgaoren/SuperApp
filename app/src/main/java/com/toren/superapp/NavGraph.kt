@@ -45,7 +45,7 @@ fun NavGraph(
             AlarmDetailScreen()
         }
         composable(route = NoteScreens.CreateNoteScreen.route) {
-            CreateNoteScreen()
+            CreateNoteScreen(navController = navController)
         }
         composable(route = NoteScreens.NoteDetailScreen.route) {
             NoteDetailScreen()

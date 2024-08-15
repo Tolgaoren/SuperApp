@@ -10,7 +10,7 @@ data class NoteEntity(
     @PrimaryKey(autoGenerate = true) val id: Int = 0,
     @ColumnInfo(name = "note_title") val title: String,
     @ColumnInfo(name = "note_content") val content: String,
-    @ColumnInfo(name = "timestamp") val timestamp: Long,
+    @ColumnInfo(name = "timestamp") val timestamp: String,
 )
 
 fun NoteEntity.toNote(): Note {

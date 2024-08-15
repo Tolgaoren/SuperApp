@@ -61,6 +61,10 @@ class RocketListViewModel
             is RocketListUiEvent.SaveLocal -> {
                 insertAllRockets(uiState.value.rockets)
             }
+
+            RocketListUiEvent.LoadFavorites -> {
+                getFavoriteRockets()
+            }
         }
     }
 

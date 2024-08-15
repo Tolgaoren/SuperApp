@@ -34,9 +34,9 @@ class RocketDetailViewModel @Inject constructor(
         when (event) {
             is RocketDetailUiEvent.FavoriteRocket -> {
                 if (isFavorite.value) {
-
+                    deleteFavoriteRocket(event.rocketId)
                 } else {
-
+                    insertFavoriteRocket(event.rocketId)
                 }
             }
         }

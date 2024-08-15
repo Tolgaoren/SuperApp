@@ -4,4 +4,5 @@ sealed class RocketListUiEvent {
     object Refresh : RocketListUiEvent()
     data class FavoriteRocket(val rocketId: String) : RocketListUiEvent()
     object SaveLocal : RocketListUiEvent()
+    object LoadFavorites : RocketListUiEvent()
 }

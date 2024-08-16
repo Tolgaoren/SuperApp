@@ -3,8 +3,10 @@ package com.toren.superapp
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.navigation.NavHostController
+import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
+import androidx.navigation.navArgument
 import com.toren.features_note.ui.note_list.NoteListScreen
 import com.toren.features_alarm.ui.graphs.AlarmScreens
 import com.toren.features_alarm.ui.alarm_detail.AlarmDetailScreen
@@ -30,7 +32,7 @@ fun NavGraph(
         modifier = modifier
     ) {
         composable(route = BottomBarScreens.Notes.route) {
-            NoteListScreen(navController)
+            NoteListScreen(navController = navController)
         }
         composable(route = BottomBarScreens.Reminders.route) {
             AlarmListScreen(navController)
@@ -47,18 +49,31 @@ fun NavGraph(
         composable(route = NoteScreens.CreateNoteScreen.route) {
             CreateNoteScreen(navController = navController)
         }
-        composable(route = NoteScreens.NoteDetailScreen.route) {
-            NoteDetailScreen()
+        composable(route = NoteScreens.NoteDetailScreen.route + "/{noteId}",
+            arguments = listOf(navArgument("noteId") {
+            type = NavType.IntType
+        })){
+            val noteId = it.arguments?.getInt("noteId") ?: -1
+            NoteDetailScreen(
+                navController = navController,
+                noteId = noteId
+            )
         }
         composable(route = RocketScreens.RocketListScreen.route) {
-            RocketListScreen(navController = navController)
+            RocketListScreen(
+                navController = navController
+            )
         }
         composable(route = RocketScreens.RocketDetailScreen.route + "/{rocketId}") {
             val rocketId = it.arguments?.getString("rocketId")
-            RocketDetailScreen(rocketId = rocketId.toString())
+            RocketDetailScreen(
+                rocketId = rocketId.toString()
+            )
         }
         composable(route = RocketScreens.FavoriteRocketsScreen.route) {
-            FavoriteRocketsScreen(navController = navController)
+            FavoriteRocketsScreen(
+                navController = navController
+            )
         }
     }
 }

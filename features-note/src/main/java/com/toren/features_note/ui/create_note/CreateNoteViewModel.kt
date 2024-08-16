@@ -5,6 +5,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.toren.domain.Resource
 import com.toren.domain.model.note.Note
+import com.toren.domain.use_case.note.GetNoteByIdUseCase
 import com.toren.domain.use_case.note.InsertNoteUseCase
 import com.toren.domain.util.getCurrentFormattedTimestamp
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -16,8 +17,8 @@ import javax.inject.Inject
 
 @HiltViewModel
 class CreateNoteViewModel @Inject constructor(
-   private val insertNoteUseCase: InsertNoteUseCase
-): ViewModel() {
+    private val insertNoteUseCase: InsertNoteUseCase,
+) : ViewModel() {
 
     private val _saveState = MutableStateFlow(false)
     val saveState: StateFlow<Boolean> = _saveState
@@ -25,12 +26,16 @@ class CreateNoteViewModel @Inject constructor(
     fun onEvent(event: CreateNoteUiEvent) {
         when (event) {
             is CreateNoteUiEvent.SaveNote -> {
-                val note = Note(
-                    title = event.title,
-                    content = event.content,
-                    timestamp = getCurrentFormattedTimestamp()
-                )
-                saveNote(note)
+                if (event.title.isBlank() && event.content.isBlank()) {
+                    return
+                } else {
+                    val note = Note(
+                        title = event.title,
+                        content = event.content,
+                        timestamp = getCurrentFormattedTimestamp()
+                    )
+                    saveNote(note)
+                }
             }
         }
     }
@@ -53,5 +58,4 @@ class CreateNoteViewModel @Inject constructor(
             }
         }.launchIn(viewModelScope)
     }
-
 }

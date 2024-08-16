@@ -34,20 +34,24 @@ import androidx.navigation.NavController
 
 @Composable
 fun CreateNoteScreen(
-    modifier: Modifier = Modifier,
     viewModel: CreateNoteViewModel = hiltViewModel(),
-    navController: NavController
+    navController: NavController,
 ) {
-
     val saveState by viewModel.saveState.collectAsState()
     var title by remember { mutableStateOf("") }
     var content by remember { mutableStateOf("") }
 
     BackHandler {
-        viewModel.onEvent(CreateNoteUiEvent.SaveNote(
-            title = title,
-            content = content
-        ))
+        if (title.isNotBlank() || content.isNotBlank()) {
+            viewModel.onEvent(
+                CreateNoteUiEvent.SaveNote(
+                    title = title,
+                    content = content
+                )
+            )
+        } else {
+            navController.popBackStack()
+        }
     }
 
     LaunchedEffect(saveState) {
@@ -55,16 +59,43 @@ fun CreateNoteScreen(
             navController.popBackStack()
         }
     }
+
+    NoteTemplate(
+        title = title,
+        content = content,
+        onTitleChange = { title = it },
+        onContentChange = { content = it },
+        onSave = {
+            viewModel.onEvent(
+                CreateNoteUiEvent.SaveNote(
+                    title = title,
+                    content = content
+                )
+            )
+        }
+    )
+}
+
+
+@Composable
+fun NoteTemplate(
+    title: String,
+    content: String,
+    onTitleChange: (String) -> Unit,
+    onContentChange: (String) -> Unit,
+    onSave: () -> Unit,
+) {
+
     Surface(
-        modifier = modifier.fillMaxSize()
+        modifier = Modifier.fillMaxSize()
     ) {
         Box(
-            modifier = modifier.fillMaxSize(),
+            modifier = Modifier.fillMaxSize(),
         ) {
             Column {
                 TextField(
                     value = title,
-                    onValueChange = { title = it },
+                    onValueChange = { onTitleChange(it) },
                     textStyle = TextStyle(
                         fontSize = 25.sp
                     ),
@@ -75,7 +106,7 @@ fun CreateNoteScreen(
                             fontWeight = FontWeight.Bold
                         )
                     },
-                    modifier = modifier.fillMaxWidth(),
+                    modifier = Modifier.fillMaxWidth(),
                     singleLine = true,
                     colors = TextFieldDefaults.colors(
                         unfocusedContainerColor = Color.Transparent,
@@ -85,7 +116,7 @@ fun CreateNoteScreen(
 
                 TextField(
                     value = content,
-                    onValueChange = { content = it },
+                    onValueChange = { onContentChange(it) },
                     textStyle = TextStyle(
                         fontSize = 17.sp,
                         textAlign = TextAlign.Start
@@ -97,7 +128,7 @@ fun CreateNoteScreen(
                             textAlign = TextAlign.Start
                         )
                     },
-                    modifier = modifier
+                    modifier = Modifier
                         .fillMaxWidth()
                         .weight(1f),
                     colors = TextFieldDefaults.colors(
@@ -109,17 +140,12 @@ fun CreateNoteScreen(
 
             FloatingActionButton(
                 onClick = {
-                    viewModel.onEvent(
-                        CreateNoteUiEvent.SaveNote(
-                            title = title,
-                            content = content
-                        )
-                    )
+                    onSave()
                 },
                 modifier = Modifier
                     .padding(30.dp)
                     .align(Alignment.BottomEnd),
-                )
+            )
             {
                 Icon(
                     imageVector = Icons.Filled.Save,

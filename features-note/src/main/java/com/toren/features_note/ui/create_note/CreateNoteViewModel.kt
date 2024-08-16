@@ -5,7 +5,6 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.toren.domain.Resource
 import com.toren.domain.model.note.Note
-import com.toren.domain.use_case.note.GetNoteByIdUseCase
 import com.toren.domain.use_case.note.InsertNoteUseCase
 import com.toren.domain.util.getCurrentFormattedTimestamp
 import dagger.hilt.android.lifecycle.HiltViewModel

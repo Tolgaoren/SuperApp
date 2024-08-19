@@ -39,7 +39,10 @@ class NoteListViewModel @Inject constructor(
                 }
 
                 is Resource.Success -> {
-                    _uiState.value = NoteListUiState(notes = result.data ?: emptyList())
+                    _uiState.value = NoteListUiState(
+                        notes = result.data?.sortedByDescending {
+                            it.timestamp
+                        } ?: emptyList())
                 }
 
                 is Resource.Error -> {

@@ -37,6 +37,7 @@ class NoteDetailViewModel @Inject constructor(
                     return
                 } else {
                     val note = Note(
+                        id = _noteState.value.note!!.id,
                         title = event.title,
                         content = event.content,
                         timestamp = getCurrentFormattedTimestamp()
@@ -80,7 +81,6 @@ class NoteDetailViewModel @Inject constructor(
                 }
                 is Resource.Success -> {
                     _noteState.value = NoteDetailUiState(note = result.data)
-                    Log.d("GetNoteById", "Note retrieved: ${result.data}")
                 }
                 is Resource.Error -> {
                     _noteState.value = NoteDetailUiState(error = result.message ?: "Error")

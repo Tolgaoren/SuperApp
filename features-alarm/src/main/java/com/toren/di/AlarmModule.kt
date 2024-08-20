@@ -1,8 +1,9 @@
-package com.toren.data.di
+package com.toren.di
 
 import android.content.Context
-import com.toren.data.repository.AlarmSchedulerImpl
+import com.toren.AlarmNotificationManager
 import com.toren.domain.repository.AlarmScheduler
+import com.toren.repository.AlarmSchedulerImpl
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -13,6 +14,16 @@ import javax.inject.Singleton
 @Module
 @InstallIn(SingletonComponent::class)
 object AlarmModule {
+
+    @Provides
+    @Singleton
+    fun provideAlarmNotificationManager(
+        @ApplicationContext context: Context
+    ): AlarmNotificationManager {
+        return AlarmNotificationManager(context)
+    }
+
+
     @Provides
     @Singleton
     fun provideAlarmScheduler(

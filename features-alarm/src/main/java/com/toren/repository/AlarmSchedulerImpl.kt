@@ -1,12 +1,12 @@
-package com.toren.data.repository
+package com.toren.repository
 
 import android.app.AlarmManager
 import android.app.PendingIntent
 import android.content.Context
 import android.content.Intent
-import com.toren.data.local.alarm.AlarmReceiver
 import com.toren.domain.model.alarm.Alarm
 import com.toren.domain.repository.AlarmScheduler
+import com.toren.receiver.AlarmReceiver
 
 class AlarmSchedulerImpl(
     private val context: Context,

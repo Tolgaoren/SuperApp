@@ -8,14 +8,12 @@ import com.toren.domain.model.rocket.Rocket
 import com.toren.domain.use_case.rocket_local.DeleteDbFavoriteRocketUseCase
 import com.toren.domain.use_case.rocket_local.GetDbFavoriteRocketsUseCase
 import com.toren.domain.use_case.rocket_local.InsertDbFavoriteRocketUseCase
-import com.toren.features_rocket.ui.rocket_list.RocketListUiEvent
 import com.toren.features_rocket.ui.rocket_list.RocketListUiState
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
-import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel

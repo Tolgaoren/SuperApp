@@ -10,7 +10,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.navigation.NavHostController
 import androidx.hilt.navigation.compose.hiltViewModel
-import com.toren.features_note.ui.create_note.NoteTemplate
+import com.toren.features_note.ui.components.NoteTemplate
 
 @Composable
 fun NoteDetailScreen(

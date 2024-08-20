@@ -21,7 +21,6 @@ fun AlarmListScreen(navController: NavHostController) {
         Box(
             modifier = Modifier
                 .fillMaxSize()
-                .padding(10.dp)
         ) {
             FloatingActionButton(
                 onClick = {

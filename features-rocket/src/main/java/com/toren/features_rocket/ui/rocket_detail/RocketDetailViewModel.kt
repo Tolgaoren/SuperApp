@@ -5,7 +5,6 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.toren.domain.Resource
 import com.toren.domain.use_case.rocket_local.DeleteDbFavoriteRocketUseCase
-import com.toren.domain.use_case.rocket_local.GetDbFavoriteRocketsUseCase
 import com.toren.domain.use_case.rocket_local.GetDbIsFavoriteRocketUseCase
 import com.toren.domain.use_case.rocket_local.GetDbRocketUseCase
 import com.toren.domain.use_case.rocket_local.InsertDbFavoriteRocketUseCase

@@ -41,7 +41,7 @@ fun NavGraph(
             RocketListScreen(navController = navController)
         }
         composable(route = AlarmScreens.CreateAlarm.route) {
-            CreateAlarmScreen()
+            CreateAlarmScreen(navController = navController)
         }
         composable(route = AlarmScreens.AlarmDetail.route) {
             AlarmDetailScreen()

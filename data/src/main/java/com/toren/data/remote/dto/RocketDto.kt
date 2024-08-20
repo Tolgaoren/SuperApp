@@ -2,7 +2,6 @@ package com.toren.data.remote.dto
 
 import android.os.Build
 import android.util.Log
-import androidx.annotation.RequiresApi
 import com.toren.domain.model.rocket.Rocket
 import java.text.SimpleDateFormat
 import java.time.OffsetDateTime

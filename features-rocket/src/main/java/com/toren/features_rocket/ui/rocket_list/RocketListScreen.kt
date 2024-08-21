@@ -103,55 +103,53 @@ fun RocketListScreen(
                     modifier = Modifier.align(Alignment.CenterVertically)
                 ) {
                     Icon(
-                        imageVector = Icons.Outlined.FavoriteBorder ,
-                        contentDescription = "Favorites button")
+                        imageVector = Icons.Outlined.FavoriteBorder,
+                        contentDescription = "Favorites button"
+                    )
                 }
             }
+            Box(
+                modifier = Modifier.fillMaxSize(),
+                contentAlignment = Alignment.Center
+            ) {
+                if (uiState.isLoading) {
 
-            if (uiState.isLoading) {
-                Box(
-                    modifier = Modifier.fillMaxSize(),
-                    contentAlignment = Alignment.Center
-                ) {
                     CircularProgressIndicator()
-                }
-            } else if (uiState.error != null) {
-                Box(
-                    modifier = Modifier
-                        .fillMaxSize(),
-                    contentAlignment = Alignment.Center
-                ) {
+
+                } else if (uiState.error != null) {
+
                     Text(text = uiState.error.toString())
-                }
-            } else {
-                PullToRefreshBox(
-                    state = state,
-                    isRefreshing = isRefreshing,
-                    onRefresh = onRefresh
-                ) {
-                    LazyColumn(
-                        modifier = Modifier.fillMaxWidth()
+
+                } else {
+                    PullToRefreshBox(
+                        state = state,
+                        isRefreshing = isRefreshing,
+                        onRefresh = onRefresh
                     ) {
-                        items(uiState.rockets) { rocket ->
-                            RocketItem(
-                                rocket = rocket,
-                                isFavorite = favoriteRocketIds.contains(rocket.id!!),
-                                onFavoriteClick = {
-                                    viewModel.onEvent(
-                                        RocketListUiEvent.FavoriteRocket(rocket.id!!)
-                                    )
-                                },
-                                onClick = {
-                                    if (isDataSavedLocally) {
-                                        navController.navigate(
-                                            RocketScreens.RocketDetailScreen.route
-                                                    + "/${rocket.id}"
+                        LazyColumn(
+                            modifier = Modifier.fillMaxWidth()
+                        ) {
+                            items(uiState.rockets) { rocket ->
+                                RocketItem(
+                                    rocket = rocket,
+                                    isFavorite = favoriteRocketIds.contains(rocket.id!!),
+                                    onFavoriteClick = {
+                                        viewModel.onEvent(
+                                            RocketListUiEvent.FavoriteRocket(rocket.id!!)
                                         )
-                                    } else {
-                                        viewModel.onEvent(RocketListUiEvent.Refresh)
+                                    },
+                                    onClick = {
+                                        if (isDataSavedLocally) {
+                                            navController.navigate(
+                                                RocketScreens.RocketDetailScreen.route
+                                                        + "/${rocket.id}"
+                                            )
+                                        } else {
+                                            viewModel.onEvent(RocketListUiEvent.Refresh)
+                                        }
                                     }
-                                }
-                            )
+                                )
+                            }
                         }
                     }
                 }

@@ -43,16 +43,27 @@ fun NavGraph(
         composable(route = AlarmScreens.CreateAlarm.route) {
             CreateAlarmScreen(navController = navController)
         }
-        composable(route = AlarmScreens.AlarmDetail.route) {
-            AlarmDetailScreen()
+        composable(
+            route = AlarmScreens.AlarmDetail.route + "/{alarmId}",
+            arguments = listOf(navArgument("alarmId") {
+                type = NavType.IntType
+            })
+        ) {
+            val alarmId = it.arguments?.getInt("alarmId") ?: -1
+            AlarmDetailScreen(
+                navController = navController,
+                alarmId = alarmId
+            )
         }
         composable(route = NoteScreens.CreateNoteScreen.route) {
             CreateNoteScreen(navController = navController)
         }
-        composable(route = NoteScreens.NoteDetailScreen.route + "/{noteId}",
+        composable(
+            route = NoteScreens.NoteDetailScreen.route + "/{noteId}",
             arguments = listOf(navArgument("noteId") {
-            type = NavType.IntType
-        })){
+                type = NavType.IntType
+            })
+        ) {
             val noteId = it.arguments?.getInt("noteId") ?: -1
             NoteDetailScreen(
                 navController = navController,

@@ -9,6 +9,7 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
@@ -68,33 +69,46 @@ fun CreateAlarmScreen(
     ) {
         TimePicker(state = timeState)
 
-        IconButton(
-            onClick = { openDatePicker = true },
-            modifier = Modifier.padding(8.dp)
-        ) {
-            Icon(
-                imageVector = Icons.Filled.DateRange,
-                contentDescription = "Date icon"
-            )
-        }
-
-        TextField(
-            value = title,
-            onValueChange = { title = it },
-            textStyle = TextStyle(
-                fontSize = 17.sp
-            ),
-            placeholder = {
-                Text(
-                    text = "Alarm",
-                    fontSize = 17.sp
-                )
-            },
+        Row (
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(8.dp),
-            singleLine = true
-        )
+                .padding(start = 8.dp, end = 8.dp),
+            horizontalArrangement = Arrangement.End,
+            verticalAlignment = Alignment.CenterVertically
+        ){
+
+            TextField(
+                value = title,
+                onValueChange = { title = it },
+                textStyle = TextStyle(
+                    fontSize = 17.sp
+                ),
+                placeholder = {
+                    Text(
+                        text = "Alarm",
+                        fontSize = 17.sp
+                    )
+                },
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(8.dp)
+                    .weight(1f),
+                singleLine = true
+            )
+
+            IconButton(
+                onClick = { openDatePicker = true },
+                modifier = Modifier
+                    .padding(8.dp)
+                    .wrapContentSize()
+            ) {
+                Icon(
+                    imageVector = Icons.Filled.DateRange,
+                    contentDescription = "Date icon"
+                )
+            }
+
+        }
 
         Row(
             modifier = Modifier

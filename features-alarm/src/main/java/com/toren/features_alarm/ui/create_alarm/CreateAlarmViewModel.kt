@@ -17,12 +17,11 @@ import java.util.Calendar
 import java.util.Date
 import java.util.Locale
 import javax.inject.Inject
-import kotlin.time.Duration.Companion.days
 
 @HiltViewModel
 class CreateAlarmViewModel @Inject constructor(
     private val alarmScheduler: AlarmScheduler, //use case ile değiştiricez
-    private val insertAlarmUseCase: InsertAlarmUseCase,
+    private val insertAlarmUseCase: InsertAlarmUseCase
 ) : ViewModel() {
 
     private val _saveState = MutableStateFlow(false)
@@ -43,7 +42,7 @@ class CreateAlarmViewModel @Inject constructor(
         }
     }
 
-    private fun calculateAlarmTime(hour: Int, minute: Int, date: Long?): Long {
+    private fun calculateAlarmTime(hour: Int, minute: Int, date: Long?): String {
         val calendar = Calendar.getInstance()
         if (date != null) {
             calendar.timeInMillis = date
@@ -63,13 +62,9 @@ class CreateAlarmViewModel @Inject constructor(
             calendar.add(Calendar.DAY_OF_MONTH, 1)
         }
 
-        val datee = Date(calendar.timeInMillis)
-        val format = SimpleDateFormat("dd MMMM yyyy, HH:mm:ss", Locale.getDefault())
-        val formattedDate = format.format(datee)
-        println(formattedDate)
-
-
-        return calendar.timeInMillis
+        val finalDate = Date(calendar.timeInMillis)
+        val format = SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.getDefault())
+        return format.format(finalDate)
     }
 
 
@@ -93,6 +88,4 @@ class CreateAlarmViewModel @Inject constructor(
             }.launchIn(viewModelScope)
         }
     }
-
-
 }

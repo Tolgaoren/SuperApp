@@ -7,6 +7,7 @@ import android.content.Intent
 import com.toren.domain.model.alarm.Alarm
 import com.toren.domain.repository.AlarmScheduler
 import com.toren.receiver.AlarmReceiver
+import com.toren.util.toDateLong
 
 class AlarmSchedulerImpl(
     private val context: Context,
@@ -15,13 +16,14 @@ class AlarmSchedulerImpl(
     private val alarmManager = context.getSystemService(AlarmManager::class.java)
 
     override fun schedule(alarm: Alarm) {
+        val alarmTime = alarm.time.toDateLong()
         val intent = Intent(context, AlarmReceiver::class.java).apply {
             putExtra("EXTRA_MESSAGE", alarm.message)
-            putExtra("EXTRA_TIME", alarm.time)
+            putExtra("EXTRA_TIME", alarmTime)
         }
         alarmManager.setExactAndAllowWhileIdle(
             AlarmManager.RTC_WAKEUP,
-            alarm.time,
+            alarmTime,
             PendingIntent.getBroadcast(
                 context,
                 alarm.id,
@@ -30,11 +32,11 @@ class AlarmSchedulerImpl(
         ))
     }
 
-    override fun cancel(alarm: Alarm) {
+    override fun cancel(id: Int) {
         alarmManager.cancel(
             PendingIntent.getBroadcast(
                 context,
-                alarm.id,
+                id,
                 Intent(context, AlarmReceiver::class.java),
                 PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE
             )

@@ -4,11 +4,13 @@ import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.PrimaryKey
 import com.toren.domain.model.alarm.Alarm
+import java.text.SimpleDateFormat
+import java.util.Locale
 
 @Entity(tableName = "alarms")
 data class AlarmEntity(
     @PrimaryKey(autoGenerate = true) val id: Int = 0,
-    @ColumnInfo(name = "alarm_time") val time: Long,
+    @ColumnInfo(name = "alarm_time") val time: String,
     @ColumnInfo(name = "alarm_message") val message: String,
     @ColumnInfo(name = "alarm_enabled") val enabled: Boolean = true,
 /*
@@ -21,11 +23,20 @@ data class AlarmEntity(
 fun AlarmEntity.toAlarm(): Alarm {
     return Alarm(
         id = id,
-        time = time,
+        time = time.toFormatedDate(),
         message = message,
         enabled = enabled
     )
 }
+
+fun String.toFormatedDate(): String {
+    val inputFormat = SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.getDefault())
+    val outputFormat = SimpleDateFormat("HH:mm\ndd MMMM", Locale.getDefault())
+    val date = inputFormat.parse(this)
+    return date?.let { outputFormat.format(it) } ?: ""
+}
+
+
 
 fun Alarm.toAlarmEntity(): AlarmEntity {
     return AlarmEntity(

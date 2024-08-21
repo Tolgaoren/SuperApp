@@ -1,7 +1,7 @@
 package com.toren.di
 
 import android.content.Context
-import com.toren.AlarmNotificationManager
+import com.toren.manager.AlarmNotificationManager
 import com.toren.domain.repository.AlarmScheduler
 import com.toren.repository.AlarmSchedulerImpl
 import dagger.Module

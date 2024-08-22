@@ -4,5 +4,5 @@ data class Alarm(
     val id: Int,
     val time: String,
     val message: String,
-    val enabled: Boolean
+    var enabled: Boolean
 )

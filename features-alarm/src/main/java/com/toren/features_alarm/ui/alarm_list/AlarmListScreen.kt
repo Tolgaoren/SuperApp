@@ -17,14 +17,15 @@ import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.Surface
+import androidx.compose.material3.Switch
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
@@ -37,8 +38,11 @@ fun AlarmListScreen(
     navController: NavHostController,
     viewModel: AlarmListViewModel = hiltViewModel(),
 ) {
-
     val uiState by viewModel.uiState.collectAsState()
+
+    LaunchedEffect(Unit) {
+        viewModel.onEvent(AlarmListUiEvent.Refresh)
+    }
 
     Surface {
 
@@ -62,7 +66,7 @@ fun AlarmListScreen(
                     onClick = {
                         navController.navigate(AlarmScreens.CreateAlarm.route)
                     },
-                    modifier = Modifier.padding(end = 20.dp)
+                    modifier = Modifier.padding(end = 20.dp, top = 10.dp)
                 ) {
                     Icon(
                         imageVector = Icons.Filled.Add,
@@ -98,7 +102,14 @@ fun AlarmListScreen(
                                 navController.navigate(
                                     AlarmScreens.AlarmDetail.route + "/${alarm.id}"
                                 )
-                            })
+                            },
+                            isSwitchChecked = alarm.enabled,
+                            onSwitchChange = {
+                                viewModel.onEvent(
+                                    AlarmListUiEvent.ReverseAlarmState(alarm.id)
+                                )
+                            }
+                        )
                     }
                 }
             }
@@ -109,8 +120,12 @@ fun AlarmListScreen(
 @Composable
 fun AlarmItem(
     alarm: Alarm,
-    onClick: () -> Unit = {},
+    onClick: () -> Unit,
+    isSwitchChecked: Boolean,
+    onSwitchChange: (Boolean) -> Unit,
 ) {
+    val hour = alarm.time.split("\n").getOrNull(0)
+    val date = alarm.time.split("\n").getOrNull(1)
     Card(
         modifier = Modifier.padding(10.dp),
         elevation = CardDefaults.cardElevation(5.dp),
@@ -124,14 +139,25 @@ fun AlarmItem(
                 .wrapContentHeight(),
             horizontalArrangement = Arrangement.SpaceBetween,
             verticalAlignment = Alignment.CenterVertically
-        ){
-            Text(
-                text = alarm.time,
-                fontSize = 20.sp,
-                textAlign = TextAlign.Center,
-            )
-            Text(
-                text = alarm.message
+        ) {
+            Column(
+                horizontalAlignment = Alignment.CenterHorizontally,
+                verticalArrangement = Arrangement.SpaceBetween
+            ) {
+                Text(
+                    text = hour ?: "",
+                    fontSize = 20.sp,
+                )
+                Text(
+                    text = date ?: "",
+                    fontSize = 15.sp,
+                )
+            }
+            Switch(
+                checked = isSwitchChecked,
+                onCheckedChange = {
+                    onSwitchChange(it)
+                }
             )
         }
     }

@@ -23,20 +23,11 @@ data class AlarmEntity(
 fun AlarmEntity.toAlarm(): Alarm {
     return Alarm(
         id = id,
-        time = time.toFormatedDate(),
+        time = time,
         message = message,
         enabled = enabled
     )
 }
-
-fun String.toFormatedDate(): String {
-    val inputFormat = SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.getDefault())
-    val outputFormat = SimpleDateFormat("HH:mm\ndd MMMM", Locale.getDefault())
-    val date = inputFormat.parse(this)
-    return date?.let { outputFormat.format(it) } ?: ""
-}
-
-
 
 fun Alarm.toAlarmEntity(): AlarmEntity {
     return AlarmEntity(

@@ -20,6 +20,7 @@ class AlarmSchedulerImpl(
         val intent = Intent(context, AlarmReceiver::class.java).apply {
             putExtra("EXTRA_MESSAGE", alarm.message)
             putExtra("EXTRA_TIME", alarmTime)
+            putExtra("EXTRA_ID", alarm.id)
         }
         alarmManager.setExactAndAllowWhileIdle(
             AlarmManager.RTC_WAKEUP,

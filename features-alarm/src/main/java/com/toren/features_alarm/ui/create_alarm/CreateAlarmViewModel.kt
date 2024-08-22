@@ -21,7 +21,7 @@ import javax.inject.Inject
 @HiltViewModel
 class CreateAlarmViewModel @Inject constructor(
     private val alarmScheduler: AlarmScheduler, //use case ile değiştiricez
-    private val insertAlarmUseCase: InsertAlarmUseCase
+    private val insertAlarmUseCase: InsertAlarmUseCase,
 ) : ViewModel() {
 
     private val _saveState = MutableStateFlow(false)
@@ -69,23 +69,30 @@ class CreateAlarmViewModel @Inject constructor(
 
 
     private fun scheduleAlarm(alarm: Alarm) {
-        alarmScheduler.schedule(alarm).also {
-            insertAlarmUseCase(alarm).onEach { result ->
-                when (result) {
-                    is Resource.Loading -> {
-                        Log.d("SaveAlarm", "Saving alarm...")
-                    }
-
-                    is Resource.Success -> {
-                        _saveState.value = true
-                        Log.d("SaveAlarm", "Alarm saved with ID: ${result.data}")
-                    }
-
-                    is Resource.Error -> {
-                        Log.e("SaveAlarm", "Error saving alarm: ${result.message}")
-                    }
+        insertAlarmUseCase(alarm).onEach { result ->
+            when (result) {
+                is Resource.Loading -> {
+                    Log.d("SaveAlarm", "Saving alarm...")
                 }
-            }.launchIn(viewModelScope)
-        }
+
+                is Resource.Success -> {
+                    Log.d("SaveAlarm", "Alarm saved with ID: ${result.data}")
+                    alarmScheduler.schedule(
+                        Alarm(
+                            id = result.data!!.toInt(),
+                            time = alarm.time,
+                            message = alarm.message,
+                            enabled = alarm.enabled
+                        )
+                    )
+                    _saveState.value = true
+                }
+
+                is Resource.Error -> {
+                    Log.e("SaveAlarm", "Error saving alarm: ${result.message}")
+                }
+            }
+        }.launchIn(viewModelScope)
     }
+
 }

@@ -8,4 +8,6 @@ interface AlarmRepository {
     suspend fun getAlarms(): List<Alarm>
 
     suspend fun deleteAlarm(id: Int): Int
+
+    suspend fun reverseAlarm(id: Int): Int
 }

@@ -131,6 +131,7 @@ class AlarmListViewModel @Inject constructor(
     }
 
     private fun updateAlarm(renewedAlarm: Alarm) {
+        println(renewedAlarm.time)
         updateAlarmUseCase(renewedAlarm).onEach { result ->
             when (result) {
                 is Resource.Loading -> {
@@ -145,7 +146,7 @@ class AlarmListViewModel @Inject constructor(
                                 if (alarm.enabled) {
                                     scheduler.cancel(renewedAlarm.id)
                                 } else {
-                                    scheduler.schedule(alarm) //renewed Alarm
+                                    scheduler.schedule(renewedAlarm)
                                 }
                                 alarm.copy(enabled = !alarm.enabled)
                             } else {
@@ -156,7 +157,10 @@ class AlarmListViewModel @Inject constructor(
                     _uiState.update { currentState ->
                         val updatedAlarms = currentState.alarms.map { alarm ->
                             if (alarm.id == renewedAlarm.id) {
-                                alarm.copy(enabled = !alarm.enabled)
+                                alarm.copy(
+                                    time = renewedAlarm.time.toFormatedDate(),
+                                    enabled = !alarm.enabled
+                                )
                             } else {
                                 alarm
                             }

@@ -18,6 +18,9 @@ interface AlarmDao {
     @Query("DELETE FROM alarms WHERE id = :id")
     suspend fun deleteAlarm(id: Int) : Int
 
-    @Query("UPDATE alarms SET alarm_enabled = NOT alarm_enabled WHERE id = :id")
-    suspend fun reverseAlarm(id: Int) : Int
+    @Update
+    suspend fun updateAlarm(alarm: AlarmEntity) : Int
+
+    @Query("UPDATE alarms SET alarm_enabled = :isEnable WHERE id = :id")
+    suspend fun updateAlarmStatus(id: Int, isEnable: Boolean): Int
 }

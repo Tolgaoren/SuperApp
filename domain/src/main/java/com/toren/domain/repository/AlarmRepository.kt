@@ -9,5 +9,7 @@ interface AlarmRepository {
 
     suspend fun deleteAlarm(id: Int): Int
 
-    suspend fun reverseAlarm(id: Int): Int
+    suspend fun updateAlarm(alarm: Alarm): Int
+
+    suspend fun updateAlarmStateById(id: Int, enabled: Boolean): Int
 }

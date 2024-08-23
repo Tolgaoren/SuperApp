@@ -5,7 +5,8 @@ import android.content.Context
 import android.content.Intent
 import android.util.Log
 import com.toren.domain.Resource
-import com.toren.domain.use_case.alarm.ReverseAlarmUseCase
+import com.toren.domain.use_case.alarm.UpdateAlarmStateByIdUseCase
+import com.toren.domain.use_case.alarm.UpdateAlarmUseCase
 import com.toren.manager.AlarmNotificationManager
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.CoroutineScope
@@ -15,10 +16,10 @@ import kotlinx.coroutines.flow.onEach
 import javax.inject.Inject
 
 @AndroidEntryPoint
-class AlarmReceiver: BroadcastReceiver() {
+class AlarmReceiver : BroadcastReceiver() {
 
     @Inject
-    lateinit var reverseAlarmUseCase: ReverseAlarmUseCase
+    lateinit var updateAlarmStateByIdUseCase: UpdateAlarmStateByIdUseCase
 
     override fun onReceive(context: Context, intent: Intent) {
         val message = intent.getStringExtra("EXTRA_MESSAGE") ?: ""
@@ -28,11 +29,14 @@ class AlarmReceiver: BroadcastReceiver() {
         val notificationManager = AlarmNotificationManager(context)
         notificationManager.sendNotification(message)
 
-        reverseAlarmState(id)
+        updateAlarmState(id)
     }
 
-    private fun reverseAlarmState(id: Int) {
-        reverseAlarmUseCase(id).onEach { result ->
+    private fun updateAlarmState(id: Int) {
+        updateAlarmStateByIdUseCase(
+            id = id,
+            enabled = false
+        ).onEach { result ->
             when (result) {
                 is Resource.Loading -> {
                     Log.d("AlarmReceiver", "Loading... id: $id")

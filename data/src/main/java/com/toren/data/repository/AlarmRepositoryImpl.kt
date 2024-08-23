@@ -23,7 +23,11 @@ class AlarmRepositoryImpl
         return alarmDao.deleteAlarm(id)
     }
 
-    override suspend fun reverseAlarm(id: Int): Int {
-        return alarmDao.reverseAlarm(id)
+    override suspend fun updateAlarm(alarm: Alarm): Int {
+        return alarmDao.updateAlarm(alarm.toAlarmEntity())
+    }
+
+    override suspend fun updateAlarmStateById(id: Int, enabled: Boolean): Int {
+        return alarmDao.updateAlarmStatus(id, enabled)
     }
 }

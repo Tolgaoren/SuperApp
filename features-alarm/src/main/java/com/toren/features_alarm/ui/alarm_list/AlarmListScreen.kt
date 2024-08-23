@@ -106,7 +106,7 @@ fun AlarmListScreen(
                             isSwitchChecked = alarm.enabled,
                             onSwitchChange = {
                                 viewModel.onEvent(
-                                    AlarmListUiEvent.ReverseAlarmState(alarm.id)
+                                    AlarmListUiEvent.ReverseAlarmState(alarm)
                                 )
                             }
                         )

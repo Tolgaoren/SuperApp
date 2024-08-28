@@ -1,4 +1,4 @@
-package com.toren.util
+package com.toren.features_alarm.util
 
 import java.text.SimpleDateFormat
 import java.util.Locale

@@ -1,4 +1,4 @@
-package com.toren.receiver
+package com.toren.features_alarm.receiver
 
 import android.content.BroadcastReceiver
 import android.content.Context
@@ -6,8 +6,7 @@ import android.content.Intent
 import android.util.Log
 import com.toren.domain.Resource
 import com.toren.domain.use_case.alarm.UpdateAlarmStateByIdUseCase
-import com.toren.domain.use_case.alarm.UpdateAlarmUseCase
-import com.toren.manager.AlarmNotificationManager
+import com.toren.features_alarm.manager.AlarmNotificationManager
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers

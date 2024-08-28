@@ -1,4 +1,4 @@
-package com.toren.manager
+package com.toren.features_alarm.manager
 
 import android.annotation.SuppressLint
 import android.app.NotificationChannel

@@ -5,12 +5,11 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.toren.domain.Resource
 import com.toren.domain.model.rocket.Rocket
-import com.toren.domain.use_case.rocket_api.GetLaunchesUseCase
 import com.toren.domain.use_case.rocket_local.DeleteDbFavoriteRocketUseCase
 import com.toren.domain.use_case.rocket_local.GetDbFavoriteRocketsUseCase
 import com.toren.domain.use_case.rocket_local.GetDbRocketsUseCase
 import com.toren.domain.use_case.rocket_local.InsertDbFavoriteRocketUseCase
-import com.toren.domain.use_case.rocket_local.InsertDbRocketsUseCase
+import com.toren.domain.use_case.rocket_local.RefreshRocketsUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -21,12 +20,11 @@ import javax.inject.Inject
 @HiltViewModel
 class RocketListViewModel
 @Inject constructor(
-    private val getLaunchesUseCase: GetLaunchesUseCase,
-    private val insertAllRocketsUseCase: InsertDbRocketsUseCase,
     private val getLocalRocketsUseCase: GetDbRocketsUseCase,
     private val insertFavoriteRocketUseCase: InsertDbFavoriteRocketUseCase,
     private val getFavoriteRocketsUseCase: GetDbFavoriteRocketsUseCase,
     private val deleteFavoriteRocketUseCase: DeleteDbFavoriteRocketUseCase,
+    private val refreshRocketsUseCase: RefreshRocketsUseCase
 ) : ViewModel() {
 
     private val _uiState = MutableStateFlow(RocketListUiState())
@@ -35,18 +33,15 @@ class RocketListViewModel
     private val _favoriteRocketIds = MutableStateFlow(setOf<String>())
     val favoriteRocketIds: StateFlow<Set<String>> = _favoriteRocketIds
 
-    private val _isDataSavedLocally = MutableStateFlow(false)
-    val isDataSavedLocally: StateFlow<Boolean> = _isDataSavedLocally
-
     init {
-        getLocalRockets()
+        getRockets()
         getFavoriteRockets()
     }
 
     fun onEvent(event: RocketListUiEvent) {
         when (event) {
             is RocketListUiEvent.Refresh -> {
-                getRockets()
+                RefreshDb()
             }
 
             is RocketListUiEvent.FavoriteRocket -> {
@@ -57,10 +52,6 @@ class RocketListViewModel
                 }
             }
 
-            is RocketListUiEvent.SaveLocal -> {
-                insertAllRockets(uiState.value.rockets)
-            }
-
             RocketListUiEvent.LoadFavorites -> {
                 getFavoriteRockets()
             }
@@ -68,45 +59,6 @@ class RocketListViewModel
     }
 
     private fun getRockets() {
-        getLaunchesUseCase().onEach { result ->
-            when (result) {
-                is Resource.Loading -> {
-                    _uiState.value = RocketListUiState(isLoading = true)
-                }
-
-                is Resource.Success -> {
-                    _uiState.value = RocketListUiState(rockets = result.data ?: emptyList())
-                    insertAllRockets(result.data ?: emptyList())
-                }
-
-                is Resource.Error -> {
-                    _uiState.value = RocketListUiState(error = result.message ?: "Error")
-                }
-            }
-        }.launchIn(viewModelScope)
-    }
-
-    private fun insertAllRockets(rockets: List<Rocket>) {
-        insertAllRocketsUseCase(rockets).onEach { result ->
-            when (result) {
-                is Resource.Loading -> {
-                    Log.d("InsertAllRockets", "Inserting all rockets...")
-                }
-
-                is Resource.Success -> {
-                    _isDataSavedLocally.value = true
-                    Log.d("InsertAllRockets", "All rockets inserted with IDs: ${result.data}")
-                }
-
-                is Resource.Error -> {
-                    _isDataSavedLocally.value = false
-                    Log.e("InsertAllRockets", "Error inserting all rockets: ${result.message}")
-                }
-            }
-        }.launchIn(viewModelScope)
-    }
-
-    private fun getLocalRockets() {
         getLocalRocketsUseCase().onEach { result ->
             when (result) {
                 is Resource.Loading -> {
@@ -114,19 +66,11 @@ class RocketListViewModel
                 }
 
                 is Resource.Success -> {
-                    if (result.data.isNullOrEmpty()) {
-                        getRockets()
-                        Log.d("GetLocalRockets", "Getting rockets from API...")
-                    } else {
-                        _uiState.value = RocketListUiState(rockets = result.data ?: emptyList())
-                        _isDataSavedLocally.value = true
-                        Log.d("GetLocalRockets", "Getting rockets from database...")
-                    }
+                    _uiState.value = RocketListUiState(rockets = result.data ?: emptyList())
                 }
 
                 is Resource.Error -> {
                     _uiState.value = RocketListUiState(error = result.message ?: "Error")
-                    _isDataSavedLocally.value = false
                 }
             }
         }.launchIn(viewModelScope)
@@ -197,6 +141,24 @@ class RocketListViewModel
                         "DeleteFavoriteRocket",
                         "Error deleting favorite rocket: ${result.message}"
                     )
+                }
+            }
+        }.launchIn(viewModelScope)
+    }
+
+    private fun RefreshDb() {
+        refreshRocketsUseCase().onEach { result ->
+            when (result) {
+                is Resource.Loading -> {
+                    _uiState.value = RocketListUiState(isLoading = true)
+                }
+
+                is Resource.Success -> {
+                    _uiState.value = RocketListUiState(rockets = result.data ?: emptyList())
+                }
+
+                is Resource.Error -> {
+                    _uiState.value = RocketListUiState(error = result.message ?: "Error")
                 }
             }
         }.launchIn(viewModelScope)

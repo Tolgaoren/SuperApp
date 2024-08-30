@@ -1,19 +1,19 @@
-package com.toren.domain.use_case.rocket_api
+package com.toren.domain.use_case.rocket_local
 
 import com.toren.domain.Resource
 import com.toren.domain.model.rocket.Rocket
-import com.toren.domain.repository.RocketApiRepository
+import com.toren.domain.repository.RocketRepository
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
 import javax.inject.Inject
 
-class GetLaunchesUseCase @Inject constructor(
-    private val repository: RocketApiRepository
-){
+class RefreshRocketsUseCase @Inject constructor(
+    private val repository: RocketRepository
+) {
     operator fun invoke(): Flow<Resource<List<Rocket>>> = flow {
         emit(Resource.Loading())
         try {
-            val rockets = repository.getLaunches()
+            val rockets = repository.refreshDb()
             emit(Resource.Success(rockets))
         } catch (e: Exception) {
             emit(Resource.Error(e.message ?: "Unknown error"))

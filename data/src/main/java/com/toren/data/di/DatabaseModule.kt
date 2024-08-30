@@ -5,6 +5,7 @@ import androidx.room.Room
 import com.google.gson.Gson
 import com.toren.data.local.TypeConverter
 import com.toren.data.local.database.LocalDatabase
+import com.toren.data.remote.api.RocketApi
 import com.toren.data.repository.AlarmRepositoryImpl
 import com.toren.data.repository.RocketRepositoryImpl
 import com.toren.data.repository.NoteRepositoryImpl
@@ -42,10 +43,9 @@ object DatabaseModule {
     }
 
     @Provides
-    fun provideRocketRepository(db: LocalDatabase): RocketRepository {
-        return RocketRepositoryImpl(db.rocketDao(), db.favoriteRocketDao())
+    fun provideRocketRepository(db: LocalDatabase, api: RocketApi): RocketRepository {
+        return RocketRepositoryImpl(db.rocketDao(), db.favoriteRocketDao(), api)
     }
-
 
     @Provides
     @Singleton

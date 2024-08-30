@@ -2,8 +2,6 @@ package com.toren.data.di
 
 import com.toren.data.BuildConfig
 import com.toren.data.remote.api.RocketApi
-import com.toren.data.repository.RocketApiRepositoryImpl
-import com.toren.domain.repository.RocketApiRepository
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -28,12 +26,4 @@ object RocketModule {
             .build()
             .create(RocketApi::class.java)
     }
-
-    @Provides
-    @Singleton
-    fun provideRocketRepository(api: RocketApi): RocketApiRepository {
-        return RocketApiRepositoryImpl(api)
-    }
-
-
 }

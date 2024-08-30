@@ -6,6 +6,8 @@ import com.toren.data.local.dao.RocketDao
 import com.toren.data.local.entity.FavoriteRocketEntity
 import com.toren.data.local.entity.toRocket
 import com.toren.data.local.entity.toRocketEntity
+import com.toren.data.remote.api.RocketApi
+import com.toren.data.remote.dto.toRocket
 import com.toren.domain.model.rocket.Rocket
 import com.toren.domain.repository.RocketRepository
 import javax.inject.Inject
@@ -14,17 +16,18 @@ class RocketRepositoryImpl
 @Inject constructor(
     private val rocketDao: RocketDao,
     private val favoriteRocketDao: FavoriteRocketDao,
+    private val api: RocketApi
 ) : RocketRepository {
     override suspend fun insertRocket(rocket: Rocket): Long {
         return rocketDao.insertRocket(rocket.toRocketEntity())
     }
 
-    override suspend fun insertAllRockets(rockets: List<Rocket>): List<Long> {
-        return rocketDao.insertAllRockets(rockets.map { it.toRocketEntity() })
-    }
-
     override suspend fun getRockets(): List<Rocket> {
-        return rocketDao.getRockets().map { it.toRocket() }
+        val localRockets = rocketDao.getRockets().map { it.toRocket() }
+        if (localRockets.isEmpty()) {
+            return refreshDb()
+        }
+        return localRockets
     }
 
     override suspend fun getRocket(id: String): Rocket {
@@ -55,6 +58,12 @@ class RocketRepositoryImpl
 
     override suspend fun deleteFavoriteRocket(id: String): Int {
         return favoriteRocketDao.deleteFavoriteRocket(id)
+    }
+
+    override suspend fun refreshDb(): List<Rocket> {
+        val apiRockets = api.getLaunches().map { it.toRocket() }
+        rocketDao.insertAllRockets(apiRockets.map { it.toRocketEntity() })
+        return apiRockets
     }
 
 

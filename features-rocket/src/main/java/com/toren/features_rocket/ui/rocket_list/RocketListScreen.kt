@@ -66,7 +66,6 @@ fun RocketListScreen(
         isRefreshing = false
     }
     val favoriteRocketIds by viewModel.favoriteRocketIds.collectAsState()
-    val isDataSavedLocally by viewModel.isDataSavedLocally.collectAsState()
 
     LaunchedEffect(Unit) {
         viewModel.onEvent(RocketListUiEvent.LoadFavorites)
@@ -139,14 +138,10 @@ fun RocketListScreen(
                                         )
                                     },
                                     onClick = {
-                                        if (isDataSavedLocally) {
                                             navController.navigate(
                                                 RocketScreens.RocketDetailScreen.route
                                                         + "/${rocket.id}"
                                             )
-                                        } else {
-                                            viewModel.onEvent(RocketListUiEvent.Refresh)
-                                        }
                                     }
                                 )
                             }

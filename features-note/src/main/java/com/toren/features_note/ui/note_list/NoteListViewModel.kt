@@ -3,7 +3,10 @@ package com.toren.features_note.ui.note_list
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.toren.domain.Resource
+import com.toren.domain.model.alarm.Alarm
+import com.toren.domain.model.note.Note
 import com.toren.domain.use_case.note.GetNotesUseCase
+import com.toren.domain.util.toFormatedDate
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -40,9 +43,9 @@ class NoteListViewModel @Inject constructor(
 
                 is Resource.Success -> {
                     _uiState.value = NoteListUiState(
-                        notes = result.data?.sortedByDescending {
+                        notes = formatNotes(result.data?.sortedByDescending {
                             it.timestamp
-                        } ?: emptyList())
+                        } ?: emptyList()))
                 }
 
                 is Resource.Error -> {
@@ -50,5 +53,12 @@ class NoteListViewModel @Inject constructor(
                 }
             }
         }.launchIn(viewModelScope)
+    }
+
+
+    private fun formatNotes(notes: List<Note>): List<Note> {
+        return notes.map { note ->
+            note.copy(timestamp = note.timestamp.toFormatedDate())
+        }
     }
 }

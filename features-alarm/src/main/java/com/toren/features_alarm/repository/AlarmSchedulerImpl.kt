@@ -6,8 +6,8 @@ import android.content.Context
 import android.content.Intent
 import com.toren.domain.model.alarm.Alarm
 import com.toren.domain.repository.AlarmScheduler
+import com.toren.domain.util.toDateLong
 import com.toren.features_alarm.receiver.AlarmReceiver
-import com.toren.features_alarm.util.toDateLong
 
 class AlarmSchedulerImpl(
     private val context: Context,

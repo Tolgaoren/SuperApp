@@ -9,7 +9,7 @@ import com.toren.domain.repository.AlarmScheduler
 import com.toren.domain.use_case.alarm.DeleteAlarmUseCase
 import com.toren.domain.use_case.alarm.GetAlarmsUseCase
 import com.toren.domain.use_case.alarm.UpdateAlarmUseCase
-import com.toren.features_alarm.util.toFormatedDate
+import com.toren.domain.util.toFormatedDate
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow

@@ -27,6 +27,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.TextStyle
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -48,57 +49,73 @@ fun NoteListScreen(
     }
 
     Surface {
-        Box(
-            modifier = Modifier
-                .fillMaxSize()
-        ) {
 
-            if (uiState.isLoading) {
-                Box(
-                    modifier = Modifier.fillMaxSize(),
-                    contentAlignment = Alignment.Center
-                ) {
-                    CircularProgressIndicator()
-                }
-            } else if (uiState.error != null) {
-                Box(
-                    modifier = Modifier
-                        .fillMaxSize(),
-                    contentAlignment = Alignment.Center
-                ) {
-                    Text(text = uiState.error.toString())
-                }
-            } else {
-                LazyVerticalGrid(
-                    columns = GridCells.Fixed(3),
-                    contentPadding = PaddingValues(10.dp),
-                    content = {
-                        items(uiState.notes) { note ->
-                            NoteItem(
-                                note = note,
-                                onClick = {
-                                    navController.navigate(
-                                        NoteScreens.NoteDetailScreen.route + "/${note.id}",
+        Column {
+            Text(
+                text = "Notes",
+                fontSize = 20.sp,
+                fontWeight = FontWeight.SemiBold,
 
-                                    )
-                                }
-                            )
-                        }
-                    }
-                )
-            }
-            FloatingActionButton(
-                onClick = {
-                    navController.navigate(NoteScreens.CreateNoteScreen.route)
-                },
                 modifier = Modifier
-                    .align(Alignment.BottomEnd)
-                    .padding(30.dp)
+                    .padding(
+                        start = 30.dp,
+                        top = 10.dp,
+                        bottom = 5.dp
+                    )
+            )
+
+            Box(
+                modifier = Modifier
+                    .fillMaxSize()
             ) {
-                Icon(
-                    imageVector = Icons.Filled.Create,
-                    "New reminder action button."
-                )
+
+                if (uiState.isLoading) {
+                    Box(
+                        modifier = Modifier.fillMaxSize(),
+                        contentAlignment = Alignment.Center
+                    ) {
+                        CircularProgressIndicator()
+                    }
+                } else if (uiState.error != null) {
+                    Box(
+                        modifier = Modifier
+                            .fillMaxSize(),
+                        contentAlignment = Alignment.Center
+                    ) {
+                        Text(text = uiState.error.toString())
+                    }
+                } else {
+                    LazyVerticalGrid(
+                        columns = GridCells.Fixed(3),
+                        contentPadding = PaddingValues(10.dp),
+                        content = {
+                            items(uiState.notes) { note ->
+                                NoteItem(
+                                    note = note,
+                                    onClick = {
+                                        navController.navigate(
+                                            NoteScreens.NoteDetailScreen.route + "/${note.id}",
+
+                                            )
+                                    }
+                                )
+                            }
+                        }
+                    )
+                }
+                FloatingActionButton(
+                    onClick = {
+                        navController.navigate(NoteScreens.CreateNoteScreen.route)
+                    },
+                    modifier = Modifier
+                        .align(Alignment.BottomEnd)
+                        .padding(30.dp)
+                ) {
+                    Icon(
+                        imageVector = Icons.Filled.Create,
+                        "New reminder action button."
+                    )
+                }
             }
         }
     }

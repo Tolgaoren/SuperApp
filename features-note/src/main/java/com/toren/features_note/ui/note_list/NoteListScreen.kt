@@ -1,5 +1,7 @@
 package com.toren.features_note.ui.note_list
 
+import androidx.compose.foundation.ExperimentalFoundationApi
+import androidx.compose.foundation.combinedClickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -12,9 +14,12 @@ import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.lazy.grid.items
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Cancel
 import androidx.compose.material.icons.filled.Create
+import androidx.compose.material.icons.filled.Delete
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
+import androidx.compose.material3.Checkbox
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.Icon
@@ -43,6 +48,8 @@ fun NoteListScreen(
     navController: NavHostController,
 ) {
     val uiState by viewModel.uiState.collectAsState()
+    val selectedNotes by viewModel.selectedNotes
+    val isItemsSelectable by viewModel.isItemsSelectable
 
     LaunchedEffect(Unit) {
         viewModel.onEvent(NoteListUiEvent.Refresh)
@@ -92,17 +99,27 @@ fun NoteListScreen(
                             items(uiState.notes) { note ->
                                 NoteItem(
                                     note = note,
+                                    isSelected = selectedNotes.contains(note),
+                                    isSelectionModeOn = isItemsSelectable,
+                                    onSelect = {
+                                        viewModel.onEvent(NoteListUiEvent.OnNoteSelected(note))
+                                    },
                                     onClick = {
                                         navController.navigate(
                                             NoteScreens.NoteDetailScreen.route + "/${note.id}",
 
                                             )
-                                    }
+                                    },
+                                    onLongPress = {
+                                        viewModel.onEvent(NoteListUiEvent.OnNoteSelected(note))
+                                        viewModel.onEvent(NoteListUiEvent.SelectionModeChanged)
+                                    },
                                 )
                             }
                         }
                     )
                 }
+
                 FloatingActionButton(
                     onClick = {
                         navController.navigate(NoteScreens.CreateNoteScreen.route)
@@ -113,18 +130,57 @@ fun NoteListScreen(
                 ) {
                     Icon(
                         imageVector = Icons.Filled.Create,
-                        "New reminder action button."
+                        contentDescription = "New reminder action button."
                     )
                 }
+
+                if (isItemsSelectable) {
+                    FloatingActionButton(
+                        onClick = {
+                            viewModel.onEvent(NoteListUiEvent.OnNotesDeleted)
+                            viewModel.onEvent(NoteListUiEvent.SelectionModeChanged)
+                        },
+                        modifier = Modifier
+                            .align(Alignment.BottomStart)
+                            .padding(30.dp)
+                    ) {
+                        Icon(
+                            imageVector = Icons.Filled.Delete,
+                            contentDescription = "Delete selected notes"
+                        )
+                    }
+
+                    FloatingActionButton(
+                        onClick = {
+                            viewModel.onEvent(NoteListUiEvent.SelectionModeChanged)
+                        },
+                        modifier = Modifier
+                            .align(Alignment.BottomCenter)
+                            .padding(30.dp)
+                    ) {
+                        Icon(
+                            imageVector = Icons.Filled.Cancel,
+                            contentDescription = "Cancel selection"
+                        )
+                    }
+
+
+                }
+
             }
         }
     }
 }
 
+@OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun NoteItem(
     note: Note,
+    isSelected: Boolean,
+    isSelectionModeOn: Boolean,
+    onSelect: () -> Unit,
     onClick: () -> Unit,
+    onLongPress: () -> Unit,
 ) {
     Column(
         modifier = Modifier.fillMaxSize(),
@@ -140,11 +196,30 @@ fun NoteItem(
                     top = 5.dp
                 )
                 .height(120.dp)
-                .fillMaxWidth(),
-            onClick = onClick,
+                .fillMaxWidth()
+                .combinedClickable(
+                    onClick = {
+                        if (isSelectionModeOn) {
+                            onSelect()
+                        } else {
+                            onClick()
+                        }
+                    },
+                    onLongClick = onLongPress
+                ),
             shape = CardDefaults.elevatedShape,
             elevation = CardDefaults.cardElevation(5.dp)
         ) {
+
+            if (isSelectionModeOn) {
+                Checkbox(
+                    checked = isSelected,
+                    onCheckedChange = { onSelect() },
+                    modifier = Modifier
+                        .align(Alignment.CenterHorizontally)
+                )
+            }
+
             Column {
                 if (note.title.isNotBlank()) {
                     Text(
@@ -192,4 +267,3 @@ fun NoteItem(
         )
     }
 }
-

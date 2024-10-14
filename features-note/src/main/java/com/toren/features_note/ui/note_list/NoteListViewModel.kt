@@ -55,7 +55,6 @@ class NoteListViewModel @Inject constructor(
                 _isItemsSelectable.value = !_isItemsSelectable.value
                 if (_isItemsSelectable.value.not()) {
                     _selectedNotes.value = emptySet()
-                    println(_selectedNotes.value.toString())
                 }
             }
 

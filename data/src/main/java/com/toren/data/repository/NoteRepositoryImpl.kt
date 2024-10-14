@@ -19,10 +19,6 @@ class NoteRepositoryImpl
         return noteDao.getNotes().map { it.toNote() }
     }
 
-    override suspend fun deleteNote(id: Int): Int {
-        return noteDao.deleteNote(id)
-    }
-
     override suspend fun getNoteById(id: Int): Note {
         return noteDao.getNoteById(id).toNote()
     }

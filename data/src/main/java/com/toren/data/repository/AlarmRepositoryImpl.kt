@@ -19,8 +19,8 @@ class AlarmRepositoryImpl
         return alarmDao.getAlarms().map { it.toAlarm() }
     }
 
-    override suspend fun deleteAlarm(id: Int): Int {
-        return alarmDao.deleteAlarm(id)
+    override suspend fun deleteAlarms(id: List<Int>): Int {
+        return alarmDao.deleteAlarms(id)
     }
 
     override suspend fun updateAlarm(alarm: Alarm): Int {

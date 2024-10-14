@@ -1,12 +1,14 @@
 package com.toren.features_alarm.ui.alarm_list
 
 import android.util.Log
+import androidx.compose.runtime.State
+import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.toren.domain.Resource
 import com.toren.domain.model.alarm.Alarm
 import com.toren.domain.repository.AlarmScheduler
-import com.toren.domain.use_case.alarm.DeleteAlarmUseCase
+import com.toren.domain.use_case.alarm.DeleteAlarmsUseCase
 import com.toren.domain.use_case.alarm.GetAlarmsUseCase
 import com.toren.domain.use_case.alarm.UpdateAlarmUseCase
 import com.toren.domain.util.toFormatedDate
@@ -25,7 +27,7 @@ import javax.inject.Inject
 @HiltViewModel
 class AlarmListViewModel @Inject constructor(
     private val getAlarmsUseCase: GetAlarmsUseCase,
-    private val deleteAlarmUseCase: DeleteAlarmUseCase,
+    private val deleteAlarmUseCase: DeleteAlarmsUseCase,
     private val updateAlarmUseCase: UpdateAlarmUseCase,
     private val scheduler: AlarmScheduler,
 ) : ViewModel() {
@@ -36,16 +38,18 @@ class AlarmListViewModel @Inject constructor(
     private val _alarms = MutableStateFlow<List<Alarm>>(emptyList())
     val alarms: StateFlow<List<Alarm>> = _alarms
 
+    private val _selectedAlarms = mutableStateOf(setOf<Alarm>())
+    val selectedAlarms: State<Set<Alarm>> = _selectedAlarms
+
+    private val _isItemsSelectable = mutableStateOf(false)
+    val isItemsSelectable: State<Boolean> = _isItemsSelectable
+
     init {
         getAlarms()
     }
 
     fun onEvent(event: AlarmListUiEvent) {
         when (event) {
-            is AlarmListUiEvent.DeleteAlarm -> {
-                deleteAlarm(event.alarmId)
-            }
-
             is AlarmListUiEvent.Refresh -> {
                 getAlarms()
             }
@@ -60,6 +64,33 @@ class AlarmListViewModel @Inject constructor(
                             message = it.message,
                             enabled = it.enabled.not()
                         )
+                    )
+                }
+            }
+
+            is AlarmListUiEvent.OnAlarmSelected -> {
+                if (_selectedAlarms.value.contains(event.alarm).not()) {
+                    _selectedAlarms.value += event.alarm
+                } else {
+                    _selectedAlarms.value -= event.alarm
+                }
+            }
+
+            is AlarmListUiEvent.SelectionModeChanged -> {
+                _isItemsSelectable.value = !_isItemsSelectable.value
+                if (_isItemsSelectable.value.not()) {
+                    _selectedAlarms.value = emptySet()
+                }
+            }
+
+            is AlarmListUiEvent.OnAlarmsDeleted -> {
+                _selectedAlarms.value.forEach {
+                    scheduler.cancel(it.id)
+                }.also {
+                    deleteAlarms(
+                        _selectedAlarms.value.map { alarm ->
+                            alarm.id
+                        }
                     )
                 }
             }
@@ -110,24 +141,22 @@ class AlarmListViewModel @Inject constructor(
         }.launchIn(viewModelScope)
     }
 
-    private fun deleteAlarm(alarmId: Int) {
-        scheduler.cancel(alarmId).also {
-            deleteAlarmUseCase(alarmId).onEach { result ->
-                when (result) {
-                    is Resource.Loading -> {
-                        Log.d("AlarmListViewModel", "Loading...")
-                    }
-
-                    is Resource.Success -> {
-                        getAlarms()
-                    }
-
-                    is Resource.Error -> {
-                        Log.d("AlarmListViewModel", "Error: ${result.message}")
-                    }
+    private fun deleteAlarms(ids: List<Int>) {
+        deleteAlarmUseCase(ids).onEach { result ->
+            when (result) {
+                is Resource.Loading -> {
+                    Log.d("AlarmListViewModel", "Loading...")
                 }
-            }.launchIn(viewModelScope)
-        }
+
+                is Resource.Success -> {
+                    getAlarms()
+                }
+
+                is Resource.Error -> {
+                    Log.d("AlarmListViewModel", "Error: ${result.message}")
+                }
+            }
+        }.launchIn(viewModelScope)
     }
 
     private fun updateAlarm(renewedAlarm: Alarm) {

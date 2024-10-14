@@ -7,7 +7,7 @@ interface AlarmRepository {
 
     suspend fun getAlarms(): List<Alarm>
 
-    suspend fun deleteAlarm(id: Int): Int
+    suspend fun deleteAlarms(id: List<Int>): Int
 
     suspend fun updateAlarm(alarm: Alarm): Int
 
